@@ -15,7 +15,7 @@ export function SecurityClient() {
       title: "Built on Trust. Governed by Principle.",
       content: (
         <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed text-lg">
-          Security, ethics, and compliance are not checkboxes at Kairos — they are the foundation every decision is built on. We protect users, businesses, partners, and the integrity of the platform.
+          Security, ethics, and compliance are not checkboxes at Kairos, they are the foundation every decision is built on. We protect users, businesses, partners, and the integrity of the platform.
         </p>
       ),
     },
@@ -34,7 +34,7 @@ export function SecurityClient() {
       id: "ethical-ai",
       title: "Ethical AI",
       items: [
-        { title: "AI is purpose-bound to platform functions", desc: "Processed strictly for defined platform purposes — not surveillance or external profiling" },
+        { title: "AI is purpose-bound to platform functions", desc: "Processed strictly for defined platform purposes, not surveillance or external profiling" },
         { title: "No data sold to train external AI", desc: "User data never exploited to train third-party AI systems without explicit consent" },
         { title: "AI insights remain platform-controlled", desc: "Matching scores and assessments stay within Kairos ecosystem" },
         { title: "Users may request deletion of AI-derived data", desc: "Consistent with applicable laws and data protection rights" },
@@ -45,9 +45,9 @@ export function SecurityClient() {
       id: "global-compliance",
       title: "Global Compliance",
       items: [
-        { title: "GDPR", desc: "EU General Data Protection Regulation — full compliance for EEA users" },
-        { title: "CCPA / CPRA", desc: "California Consumer Privacy Act — transparency and control for California residents" },
-        { title: "NDPR", desc: "Nigeria Data Protection Regulation — NDPB-administered compliance" },
+        { title: "GDPR", desc: "EU General Data Protection Regulation, full compliance for EEA users" },
+        { title: "CCPA / CPRA", desc: "California Consumer Privacy Act, transparency and control for California residents" },
+        { title: "NDPR", desc: "Nigeria Data Protection Regulation, NDPB-administered compliance" },
         { title: "Multi-jurisdictional rights", desc: "Users may exercise rights under all applicable frameworks" },
       ],
     },
@@ -55,12 +55,12 @@ export function SecurityClient() {
       id: "data-classification",
       title: "Data Classification",
       items: [
-        { title: "Account information", desc: "Name, email, phone, profile details — for identity and communication" },
-        { title: "Identity verification data", desc: "NIN, SSN, EIN, government ID — for fraud prevention and vetting" },
-        { title: "Payment information", desc: "Bank details, transaction data — for escrow and facilitation" },
-        { title: "Platform usage & behavioral data", desc: "Activity logs, interactions — for improvement and safety" },
-        { title: "AI assessment data", desc: "Matching scores, skill evaluations — for vetting and matching" },
-        { title: "Partner-shared data", desc: "Integration exchange — only for agreed, defined purposes" },
+        { title: "Account information", desc: "Name, email, phone, profile details, for identity and communication" },
+        { title: "Identity verification data", desc: "NIN, SSN, EIN, government ID, for fraud prevention and vetting" },
+        { title: "Payment information", desc: "Bank details, transaction data, for escrow and facilitation" },
+        { title: "Platform usage & behavioral data", desc: "Activity logs, interactions, for improvement and safety" },
+        { title: "AI assessment data", desc: "Matching scores, skill evaluations, for vetting and matching" },
+        { title: "Partner-shared data", desc: "Integration exchange, only for agreed, defined purposes" },
       ],
     },
     {
@@ -111,7 +111,7 @@ export function SecurityClient() {
               Security & Compliance
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto text-lg">
-              Military-grade encryption, ethical AI governance, and global regulatory compliance — operationalized, not aspirational.
+              Military-grade encryption, ethical AI governance, and global regulatory compliance, operationalized, not aspirational.
             </p>
           </div>
         </div>

@@ -23,7 +23,7 @@ export function HowItWorksClient() {
     {
       step: "3",
       title: "Complete a short case study",
-      desc: "Showcase your skills through real work samples. We value capability over just resumes — prove your expertise.",
+      desc: "Showcase your skills through real work samples. We value capability over just resumes, prove your expertise.",
       icon: ShieldCheck,
     },
     {
@@ -90,7 +90,7 @@ export function HowItWorksClient() {
               How It Works
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto text-lg">
-              From discovery to hire, simplified. Learn how Kairos connects talent with opportunity — and how companies build stronger teams.
+              From discovery to hire, simplified. Learn how Kairos connects talent with opportunity, and how companies build stronger teams.
             </p>
           </div>
         </div>

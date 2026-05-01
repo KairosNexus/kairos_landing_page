@@ -1,27 +1,44 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import { Search, ArrowLeft, MapPin, Clock, Filter, Briefcase, DollarSign, ArrowRight } from "lucide-react";
 import Link from "next/link";
-import { jobs as allJobs } from "@/lib/api";
+import { getPublicJobs, PublicJob } from "@/lib/api";
 
 export default function JobsPage() {
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [selectedType, setSelectedType] = useState("All");
+  const [publicJobs, setPublicJobs] = useState<PublicJob[]>([]);
+  const [loading, setLoading] = useState(true);
 
-  const categories = useMemo(() => ["All", ...Array.from(new Set(allJobs.map(j => j.category)))], []);
-  const types = useMemo(() => ["All", ...Array.from(new Set(allJobs.map(j => j.type)))], []);
+  useEffect(() => {
+    const fetchPublicJobs = async () => {
+      try {
+        const response = await getPublicJobs();
+        setPublicJobs(response.data);
+      } catch (error) {
+        console.error("Failed to fetch public jobs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPublicJobs();
+  }, []);
+
+  const categories = useMemo(() => ["All", ...Array.from(new Set(publicJobs.map(j => j.type)))], [publicJobs]);
+  const types = useMemo(() => ["All", ...Array.from(new Set(publicJobs.map(j => j.locationType)))], [publicJobs]);
 
   const filteredJobs = useMemo(() => {
-    return allJobs.filter(job => 
+    return publicJobs.filter(job => 
       (job.title.toLowerCase().includes(searchQuery.toLowerCase()) || 
-       job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-       job.description.toLowerCase().includes(searchQuery.toLowerCase())) &&
-      (selectedCategory === "All" || job.category === selectedCategory) &&
-      (selectedType === "All" || job.type === selectedType)
+       job.companyName.toLowerCase().includes(searchQuery.toLowerCase()) ||
+       job.skills.some(skill => skill.toLowerCase().includes(searchQuery.toLowerCase()))) &&
+      (selectedCategory === "All" || job.type === selectedCategory) &&
+      (selectedType === "All" || job.locationType === selectedType)
     );
-  }, [searchQuery, selectedCategory, selectedType]);
+  }, [searchQuery, selectedCategory, selectedType, publicJobs]);
 
   return (
     <div className="pt-32 pb-20">
@@ -103,12 +120,37 @@ export default function JobsPage() {
 
         {/* Jobs List */}
         <div className="grid grid-cols-1 gap-4">
-          {filteredJobs.length > 0 ? (
+          {loading ? (
+            // Loading skeletons
+            Array.from({ length: 5 }).map((_, index) => (
+              <div key={index} className="bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-[2rem] shadow-sm border border-zinc-100 dark:border-zinc-800 animate-pulse">
+                <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
+                  <div className="w-16 h-16 bg-zinc-200 dark:bg-zinc-700 rounded-2xl flex-shrink-0"></div>
+                  
+                  <div className="flex-1 space-y-3">
+                    <div className="h-6 bg-zinc-200 dark:bg-zinc-700 rounded w-3/4"></div>
+                    
+                    <div className="flex flex-wrap gap-x-6 gap-y-2">
+                      <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-20"></div>
+                      <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-20"></div>
+                      <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-20"></div>
+                      <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-20"></div>
+                    </div>
+                  </div>
+
+                  <div className="flex items-center gap-4 w-full sm:w-auto pt-4 sm:pt-0">
+                    <div className="h-10 bg-zinc-200 dark:bg-zinc-700 rounded w-24"></div>
+                    <div className="h-10 bg-zinc-200 dark:bg-zinc-700 rounded w-10"></div>
+                  </div>
+                </div>
+              </div>
+            ))
+          ) : filteredJobs.length > 0 ? (
             filteredJobs.map((job) => (
               <div key={job.id} className="bg-white dark:bg-zinc-900 p-6 sm:p-8 rounded-[2rem] shadow-sm border border-zinc-100 dark:border-zinc-800 hover:shadow-lg hover:border-pink-100 dark:hover:border-pink-900/30 transition-all group">
                 <div className="flex flex-col sm:flex-row gap-6 items-start sm:items-center">
                   <div className="w-16 h-16 bg-pink-50 dark:bg-pink-900/10 rounded-2xl flex items-center justify-center flex-shrink-0">
-                    <job.icon className="w-8 h-8 text-[#C2185B]" />
+                    <Briefcase className="w-8 h-8 text-[#C2185B]" />
                   </div>
                   
                   <div className="flex-1">
@@ -119,19 +161,19 @@ export default function JobsPage() {
                     <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-sm text-zinc-500 dark:text-zinc-400">
                       <div className="flex items-center gap-1.5 font-medium">
                         <Briefcase className="w-4 h-4" />
-                        {job.company}
+                        {job.companyName}
                       </div>
                       <div className="flex items-center gap-1.5">
                         <MapPin className="w-4 h-4" />
-                        {job.location}
+                        {job.locationType}
                       </div>
                       <div className="flex items-center gap-1.5">
                         <DollarSign className="w-4 h-4" />
-                        {job.pay}
+                        {job.compensation || 'Competitive pay'}
                       </div>
                       <div className="flex items-center gap-1.5">
                         <Clock className="w-4 h-4" />
-                        {job.postedAt}
+                        {new Date(job.createdAt).toLocaleDateString()}
                       </div>
                     </div>
                   </div>
@@ -148,18 +190,14 @@ export default function JobsPage() {
               </div>
             ))
           ) : (
-            <div className="py-24 text-center bg-white dark:bg-zinc-900 rounded-[3rem] border border-zinc-100 dark:border-zinc-800 shadow-sm">
-              <div className="w-20 h-20 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center mx-auto mb-6">
-                <Search className="w-10 h-10 text-zinc-300 dark:text-zinc-600" />
+            <div className="text-center py-20">
+              <div className="w-24 h-24 mx-auto mb-6 bg-zinc-100 dark:bg-zinc-800 rounded-full flex items-center justify-center">
+                <Search className="w-12 h-12 text-zinc-400" />
               </div>
-              <h3 className="text-2xl font-bold dark:text-white mb-2">No jobs found</h3>
-              <p className="text-zinc-500 dark:text-zinc-400">Try adjusting your search or filters to find your next opportunity.</p>
-              <button 
-                onClick={() => {setSearchQuery(""); setSelectedCategory("All"); setSelectedType("All");}}
-                className="mt-8 text-[#C2185B] font-bold hover:underline"
-              >
-                Clear all filters
-              </button>
+              <h3 className="text-xl font-bold dark:text-white mb-2">No jobs found</h3>
+              <p className="text-zinc-500 dark:text-zinc-400">
+                Try adjusting your search criteria or check back later for new opportunities.
+              </p>
             </div>
           )}
         </div>

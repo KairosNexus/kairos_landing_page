@@ -113,7 +113,7 @@ export function PrivacyPolicyClient() {
               {/* Intro */}
               <div className="mb-12">
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed">
-                  Kairos Nexus Global (&quot;Kairos,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) takes privacy, security, and data governance seriously. This Privacy Policy explains how we collect, classify, use, protect, and govern personal information across our platform. It applies to all users — job seekers, businesses, and integration partners — operating through kairosng.com and associated services.
+                  Kairos Nexus Global (&quot;Kairos,&quot; &quot;we,&quot; &quot;us,&quot; or &quot;our&quot;) takes privacy, security, and data governance seriously. This Privacy Policy explains how we collect, classify, use, protect, and govern personal information across our platform. It applies to all users, job seekers, businesses, and integration partners, operating through kairosng.com and associated services.
                 </p>
               </div>
 
@@ -209,7 +209,7 @@ export function PrivacyPolicyClient() {
               <section id="section-4" className="mb-12 scroll-mt-24">
                 <h2 className="text-2xl font-bold dark:text-white mb-4">4. Security Standards</h2>
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
-                  Kairos implements technical and organizational security measures that meet enterprise-grade standards. We do not rely on vague promises — our security posture is specific and operational.
+                  Kairos implements technical and organizational security measures that meet enterprise-grade standards. We do not rely on vague promises, our security posture is specific and operational.
                 </p>
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
                   Our security infrastructure includes:
@@ -235,7 +235,7 @@ export function PrivacyPolicyClient() {
                   Kairos uses AI systems to enhance talent matching, skill verification, scoring, and platform functionality. We are committed to the ethical and transparent use of AI.
                 </p>
                 <ul className="list-disc list-inside text-zinc-600 dark:text-zinc-400 space-y-2 pl-4">
-                  <li>AI systems process user data strictly for defined platform purposes — not for surveillance, external profiling, or unauthorized uses</li>
+                  <li>AI systems process user data strictly for defined platform purposes, not for surveillance, external profiling, or unauthorized uses</li>
                   <li>User data is not sold or used to train external AI systems without explicit user consent</li>
                   <li>AI-generated insights (matching scores, assessments) remain platform-controlled and purpose-bound</li>
                   <li>AI outputs are not resold to third parties or used beyond the scope for which consent was given</li>
@@ -279,7 +279,7 @@ export function PrivacyPolicyClient() {
                   <li>Users may request deletion of their personal data at any time through their account settings or by contacting us</li>
                   <li>Verified deletion requests are processed within thirty (30) calendar days</li>
                   <li>Upon termination of partner integrations, shared data will be securely deleted within thirty (30) days unless legally required to retain it</li>
-                  <li>Secure deletion protocols are followed for all data destruction — data is not merely deactivated, it is destroyed</li>
+                  <li>Secure deletion protocols are followed for all data destruction, data is not merely deactivated, it is destroyed</li>
                   <li>Certain categories of data may be retained longer where required by law (e.g., financial records, fraud prevention obligations)</li>
                   <li>Users will be informed if retention beyond the standard period is required</li>
                 </ul>
@@ -292,11 +292,11 @@ export function PrivacyPolicyClient() {
                   Kairos does not sell personal data. Data may be shared only in the following limited circumstances:
                 </p>
                 <ul className="list-disc list-inside text-zinc-600 dark:text-zinc-400 space-y-2 pl-4">
-                  <li><strong className="text-zinc-900 dark:text-white">Service providers:</strong> Trusted third parties who assist in operating our platform (e.g., payment processors, identity verification partners, cloud infrastructure) — bound by strict data processing agreements</li>
+                  <li><strong className="text-zinc-900 dark:text-white">Service providers:</strong> Trusted third parties who assist in operating our platform (e.g., payment processors, identity verification partners, cloud infrastructure), bound by strict data processing agreements</li>
                   <li><strong className="text-zinc-900 dark:text-white">Integration partners:</strong> Only with data explicitly shared for agreed purposes under Partner Data Governance standards (see Section 9)</li>
                   <li><strong className="text-zinc-900 dark:text-white">Legal obligations:</strong> When required by law, court order, or regulatory authority</li>
                   <li><strong className="text-zinc-900 dark:text-white">Safety:</strong> To prevent fraud, protect user safety, or defend Kairos&apos;s legal rights</li>
-                  <li><strong className="text-zinc-900 dark:text-white">Business transfers:</strong> In the event of a merger, acquisition, or asset sale — users will be notified in advance</li>
+                  <li><strong className="text-zinc-900 dark:text-white">Business transfers:</strong> In the event of a merger, acquisition, or asset sale, users will be notified in advance</li>
                 </ul>
               </section>
 
@@ -304,15 +304,15 @@ export function PrivacyPolicyClient() {
               <section id="section-9" className="mb-12 scroll-mt-24">
                 <h2 className="text-2xl font-bold dark:text-white mb-4">9. Partner Data Governance & Integration Standards</h2>
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4">
-                  As Kairos deepens enterprise partnerships and API integrations, we hold all partner relationships to strict data governance standards. These are not optional — they are contractual requirements.
+                  As Kairos deepens enterprise partnerships and API integrations, we hold all partner relationships to strict data governance standards. These are not optional, they are contractual requirements.
                 </p>
                 <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3">Partner Data Standards</h3>
                 <ul className="list-disc list-inside text-zinc-600 dark:text-zinc-400 space-y-2 pl-4">
-                  <li>Data sharing is purpose-bound — limited strictly to agreed, documented use cases</li>
+                  <li>Data sharing is purpose-bound, limited strictly to agreed, documented use cases</li>
                   <li>Partner data will not be resold or used for unrelated commercial purposes</li>
                   <li>All shared data is encrypted in transit and at rest under the standards defined in Section 4</li>
                   <li>Access to shared data is limited to authorized personnel only on both sides</li>
-                  <li>All integration activity is logged and auditable — Kairos maintains complete audit trails</li>
+                  <li>All integration activity is logged and auditable, Kairos maintains complete audit trails</li>
                   <li>Upon termination of partnership, shared data will be deleted within thirty (30) days unless legally required to retain it</li>
                   <li>Partners are required to maintain comparable security and privacy standards and certify their compliance upon request</li>
                   <li>Non-circumvention: partner data may not be used to bypass platform relationships or solicit users independently</li>
@@ -329,7 +329,7 @@ export function PrivacyPolicyClient() {
                   Kairos Nexus Global is committed to compliance with applicable data protection regulations across all jurisdictions where our users and partners operate.
                 </p>
 
-                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3">General Data Protection Regulation (GDPR) — European Union</h3>
+                <h3 className="text-lg font-bold text-zinc-900 dark:text-white mb-3">General Data Protection Regulation (GDPR), European Union</h3>
                 <p className="text-zinc-600 dark:text-zinc-400 leading-relaxed mb-4 pl-4 border-l-2 border-[#C2185B]">
                   Users in the European Economic Area have the right to access, rectify, erase, restrict processing of, and port their personal data. They also have the right to object to processing and to lodge a complaint with a supervisory authority. Our lawful basis for processing is typically contract performance, legitimate interests, or explicit consent.
                 </p>

@@ -1,9 +1,22 @@
 import { CheckCircle2, UserCheck, Zap, TrendingDown, Shield, ArrowRight, Search, FileText, Send, ClipboardList, Users, UserPlus, Brain, Star, Code, Palette, Headset, Award, Building } from "lucide-react";
 import Link from "next/link";
+import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { TrustSection } from "./trust-section";
 import { Cofounders } from "./cofounders";
 
 export function CompanyLanding() {
+  const [searchQuery, setSearchQuery] = useState("");
+  const router = useRouter();
+
+  const handleSearch = () => {
+    if (searchQuery.trim()) {
+      router.push(`/talents?search=${encodeURIComponent(searchQuery)}`);
+    } else {
+      router.push('/talents');
+    }
+  };
+
   const categories = [
     { title: "Marketing & Growth", desc: "Social media, content, paid ads experts who drive results.", tag: "Marketing", count: "390+ Experts", icon: Code },
     { title: "Graphic & Brand Design", desc: "Senior designers specialized in branding, SaaS UI/UX, and complex workflows.", tag: "Design", count: "420+ Experts", icon: Palette },
@@ -16,56 +29,71 @@ export function CompanyLanding() {
   return (
     <div className="flex-1">
       {/* Hero Section */}
-      <section className="relative pt-22 pb-12 lg:pt-12 lg:pb-0 overflow-hidden">
+      <section className="relative pt-24 pb-16 overflow-hidden">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="relative z-10">
-            {/* Top Row: Text and Image side by side */}
-            <div className="flex items-center justify-between gap-4 mb-0">
-              <div className="flex-1 max-w-[60%] lg:max-w-xl text-left">
-                <span className="inline-block px-4 py-2 rounded-full bg-[#1A1A1A] text-xs font-bold text-zinc-400 mb-6 uppercase tracking-wider">
-                  For companies
-                </span>
-                <h1 className="text-2xl sm:text-5xl lg:text-7xl font-bold dark:text-white leading-[1.1] mb-4">
-                  Cut Hiring Costs by Up to 70%. Unlock Global Talent That Delivers.
-                </h1>
-                <p className="text-[12px] sm:text-base lg:text-xl text-zinc-400 mb-0 leading-relaxed">
-                  We connect U.S. businesses to pre-vetted global talent, reducing cost while maintaining exceptional quality — and give skilled professionals access to meaningful, paid opportunities.
-                </p>
-              </div>
-              
-              <div className="flex-1 max-w-[50%] lg:max-w-lg">
-                <img 
-                  src="/company_hero.png" 
-                  alt="Company Hero"
-                  className="w-full h-auto max-h-[300px] lg:max-h-[750px] object-contain object-right-bottom drop-shado"
-                />
+          <div className="relative z-10 text-center">
+            <span className="inline-block px-4 py-2 rounded-full bg-[#1A1A1A] text-xs font-bold text-zinc-400 mb-6 uppercase tracking-wider">
+              For companies
+            </span>
+            
+            <h1 className="text-3xl sm:text-5xl lg:text-7xl font-bold dark:text-white leading-tight mb-6">
+              Cut Hiring Costs by 70%
+            </h1>
+            
+            <p className="text-base sm:text-lg lg:text-xl text-zinc-400 mb-12 max-w-3xl mx-auto">
+              Hire pre-vetted global talent faster and Affordable.
+            </p>
+
+            {/* Large Search Bar */}
+            <div className="max-w-3xl mx-auto bg-white rounded-[2.5rem] p-6 shadow-xl shadow-pink-500/5 border border-zinc-100 mb-8">
+<div className="flex flex-col gap-6">
+                <div className="flex items-center gap-3 pl-6 pr-2 py-2 border border-zinc-100 rounded-2xl bg-zinc-50 dark:bg-zinc-950/50">
+                  <Search className="w-6 h-6 text-zinc-400 flex-shrink-0" />
+                  <input 
+                    type="text" 
+                    placeholder="Search talent by role, skill, availability, or timezone..."
+                    className="w-full bg-transparent border-none focus:ring-0 text-zinc-900 dark:text-white placeholder:text-zinc-400 py-4 text-lg"
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onKeyPress={(e) => e.key === 'Enter' && handleSearch()}
+                  />
+                  <button 
+                    className="bg-[#C2185B] text-white px-8 py-4 rounded-xl font-bold hover:bg-[#A3154D] transition-all flex-shrink-0"
+                    onClick={handleSearch}
+                  >
+                    Search
+                  </button>
+                </div>
+                
+                <div className="flex flex-wrap justify-center gap-3">
+                  {["Product Design", "Frontend Engineers", "Customer Success", "Virtual Assistance"].map(tag => (
+                    <button
+                      key={tag}
+                      onClick={() => {
+                        setSearchQuery(tag);
+                        handleSearch();
+                      }}
+                      className="px-4 py-2 rounded-full bg-pink-50 text-xs font-bold text-zinc-900 hover:bg-pink-100 transition-colors cursor-pointer"
+                    >
+                      {tag}
+                    </button>
+                  ))}
+                </div>
+
+                <Link href="/categories" className="text-[#C2185B] font-bold text-sm hover:underline cursor-pointer">
+                  See all hiring categories
+                </Link>
               </div>
             </div>
 
-            {/* Bottom Row: Search Bar Card */}
-            <div className="max-w-2xl mx-auto lg:mx-0 bg-white rounded-[2rem] p-6 shadow-2xl shadow-pink-500/10 border border-zinc-100 relative z-20 mt-6 lg:-mt-20">
-              <div className="flex items-center gap-2 p-1 border border-zinc-100 rounded-2xl mb-4">
-                <div className="flex-1 flex items-center gap-3 pl-4">
-                  <Search className="w-5 h-5 text-zinc-400" />
-                  <input 
-                    type="text" 
-                    placeholder="Search talent by role, skill, availability, or timezone"
-                    className="w-full bg-transparent border-none focus:ring-0 text-zinc-900 placeholder:text-zinc-400 py-3"
-                  />
-                </div>
-                <button className="bg-[#C2185B] text-white p-4 rounded-2xl hover:bg-[#A3154D] transition-colors cursor-pointer">
-                  <ArrowRight className="w-5 h-5" />
-                </button>
-              </div>
-              
-              <div className="flex flex-wrap gap-2">
-                {["Product Design", "Frontend Engineers", "Customer Success"].map(tag => (
-                  <span key={tag} className="px-4 py-2 rounded-full bg-pink-50 text-xs font-bold text-zinc-900 cursor-pointer hover:bg-pink-100 transition-colors">
-                    {tag}
-                  </span>
-                ))}
-              </div>
-            </div>
+            {/* Hero Image - Bottom */}
+            {/* <div className="max-w-4xl mx-auto mt-8">
+              <img 
+                src="/company_hero.png" 
+                alt="Company Hero"
+                className="w-full h-auto max-h-[400px] lg:max-h-[500px] object-contain"
+              />
+            </div> */}
           </div>
         </div>
       </section>
@@ -84,7 +112,7 @@ export function CompanyLanding() {
                 High-demand skill sets companies are actively hiring for through Kairos.
               </p>
             </div>
-            <Link href="/categories" className="text-[#C2185B] font-bold text-sm hover:underline cursor-pointer">See all categories</Link>
+            <Link href="/categories" className="px-6 py-2 rounded-full bg-pink-50 text-[#C2185B] font-bold text-sm hover:bg-pink-100 transition-colors cursor-pointer">See all categories</Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -130,7 +158,7 @@ export function CompanyLanding() {
               { title: "Verified experts only", desc: "Skip unqualified applicants. Every profile is identity-verified, skill-assessed, and includes real work samples (case studies).", icon: UserCheck },
               { title: "Faster shortlists", desc: "Receive pre-vetted candidates within 48 hours. Filter by role, seniority, availability, timezone, and working style to reach decisions sooner.", icon: Zap },
               { title: "Reduced hiring cost", desc: "Access exceptional global talent at 60–70% lower cost than traditional local hiring, without compromising quality.", icon: TrendingDown },
-              { title: "Hiring confidence", desc: "Every step is designed to help teams hire with more trust, clarity, and operational control — from case study review to onboarding.", icon: CheckCircle2 },
+              { title: "Hiring confidence", desc: "Every step is designed to help teams hire with more trust, clarity, and operational control, from case study review to onboarding.", icon: CheckCircle2 },
             ].map((feature) => (
               <div key={feature.title} className="p-8 rounded-[2.5rem] bg-gradient-to-b from-white to-[#C2185B]/10 dark:from-zinc-900 dark:to-zinc-950 border border-white dark:border-zinc-800 shadow-sm transition-transform hover:-translate-y-1">
                 <div className="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl mb-8 shadow-sm flex items-center justify-center">
@@ -159,8 +187,8 @@ export function CompanyLanding() {
               </p>
               <div className="space-y-6 mb-12">
                 {[
-                  "Shortlist talent by role, skills, seniority, and availability — all pre-vetted",
-                  "Review case studies and work samples before interviews — see real capability",
+                  "Shortlist talent by role, skills, seniority, and availability, all pre-vetted",
+                  "Review case studies and work samples before interviews, see real capability",
                   "Hire globally while keeping cost efficiency (60–70% savings) in view",
                   "Move from shortlist to hire in days, not weeks"
                 ].map((item) => (
@@ -238,7 +266,7 @@ export function CompanyLanding() {
             <span className="text-zinc-400 font-bold text-xs uppercase tracking-widest mb-4 block text-zinc-500">Ready to hire?</span>
             <h2 className="text-4xl lg:text-5xl font-bold text-white mb-6">Hire vetted talent faster and at lower cost.</h2>
             <p className="text-zinc-400 text-lg leading-relaxed">
-              A cleaner route from hiring need to qualified shortlist — built for companies that want speed, quality, and trust.
+              A cleaner route from hiring need to qualified shortlist, built for companies that want speed, quality, and trust.
             </p>
           </div>
           <Link href="/signup" className="relative z-10 bg-[#C2185B] text-white px-10 py-4 rounded-2xl font-bold hover:bg-[#A3154D] transition-colors shadow-lg shadow-pink-500/20 cursor-pointer">

@@ -1,7 +1,9 @@
-import { Search, ArrowRight, Star, Clock, MapPin, CheckCircle2, ShieldCheck, Filter, Target, Globe, Palette, Headset, Code, Brain, FileText, Users, ExternalLink, Award, Building } from "lucide-react";
+import { Search, ArrowRight, Star, Clock, MapPin, CheckCircle2, ShieldCheck, Filter, Target, Globe, Palette, Headset, Code, Brain, FileText, Users, ExternalLink, Award, Building, Briefcase, Megaphone, Video, UserCheck, Settings } from "lucide-react";
 import Link from "next/link";
+import { useState, useEffect } from "react";
 import { TrustSection } from "./trust-section";
 import { Cofounders } from "./cofounders";
+import { getPublicJobs, PublicJob } from "@/lib/api";
 
 // Custom LinkedIn Icon since it might be missing in this version of lucide-react
 const LinkedinIcon = ({ className }: { className?: string }) => (
@@ -24,11 +26,43 @@ const LinkedinIcon = ({ className }: { className?: string }) => (
 );
 
 export function JobLanding() {
-  const roles = [
-    { title: "Product Designer", company: "SaaS Growth Co.", location: "Remote", pay: "$2.8k-$4.1k/month", featured: true, icon: Palette },
-    { title: "Customer Success Lead", company: "Northstar AI", location: "U.S. Hours", pay: "$1.8k-$3.2k/month", urgent: true, icon: Headset },
-    { title: "Frontend Engineer", company: "Kairos Partner Role", location: "Remote", pay: "$3.5k-$5.0k/month", verified: true, icon: Code },
-  ];
+  const [publicJobs, setPublicJobs] = useState<PublicJob[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchPublicJobs = async () => {
+      try {
+        const response = await getPublicJobs({ limit: 3 });
+        setPublicJobs(response.data);
+      } catch (error) {
+        console.error("Failed to fetch public jobs:", error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPublicJobs();
+  }, []);
+
+  // Map job types to icons for display
+  const getJobIcon = (jobType: string) => {
+    const iconMap: Record<string, React.ComponentType<{ className?: string }>> = {
+      'Design': Palette,
+      'Marketing': Megaphone,
+      'Development': Code,
+      'Creative': Video,
+      'Operations': UserCheck,
+      'Science': Brain,
+      'Management': Briefcase,
+      'Legal': FileText,
+      'HR': Users,
+      'Infrastructure': Settings,
+      'Sales': Search,
+      'default': Briefcase
+    };
+    
+    return iconMap[jobType] || iconMap.default;
+  };
 
   const highlightCategories = [
     { title: "Product Design", desc: "UI/UX designers who ship real products", count: "390+ Experts" },
@@ -45,14 +79,12 @@ export function JobLanding() {
             {/* Top Row: Text and Image side by side */}
             <div className="flex items-center justify-between gap-4 mb-8">
               <div className="flex-1 max-w-[60%] relative md:bottom-70 lg:max-w-xl text-left">
-                <span className="inline-block px-4 py-2 rounded-full bg-[#1A1A1A] text-xs font-bold text-zinc-400 mb-6 uppercase tracking-wider">
-                  For talent
-                </span>
+            
                 <h1 className="text-2xl sm:text-5xl lg:text-7xl font-bold dark:text-white leading-[1.1] mb-4">
                   A Better Way to Find Serious Remote Work.
                 </h1>
                 <p className="text-[12px] sm:text-base lg:text-xl text-zinc-400 mb-0 leading-relaxed">
-                  We connect pre-vetted global talent to U.S. businesses, giving you access to meaningful, paid opportunities that value your expertise.
+                  We connect Vetted global talent to U.S. businesses, giving you access to paid opportunities that value your expertise.
                 </p>
               </div>
               
@@ -81,13 +113,13 @@ export function JobLanding() {
                 </button>
               </div>
               
-              <div className="flex flex-wrap gap-2">
-                {["Product Design", "Frontend Engineer"].map(tag => (
-                  <span key={tag} className="px-4 py-2 rounded-full bg-pink-50 text-xs font-bold text-zinc-900 cursor-pointer hover:bg-pink-100 transition-colors">
-                    {tag}
-                  </span>
-                ))}
-              </div>
+               <div className="flex flex-wrap gap-2">
+                 {["Product Design", "Frontend Engineer", "Virtual Assistance", "Marketing"].map(tag => (
+                   <span key={tag} className="px-4 py-2 rounded-full bg-pink-50 text-xs font-bold text-zinc-900 cursor-pointer hover:bg-pink-100 transition-colors">
+                     {tag}
+                   </span>
+                 ))}
+               </div>
             </div>
           </div>
         </div>
@@ -105,27 +137,51 @@ export function JobLanding() {
               <span className="text-[#C2185B] font-bold text-xs uppercase tracking-widest mb-2 block">Open Opportunities</span>
               <h2 className="text-3xl font-bold dark:text-white">Top roles hiring now</h2>
             </div>
-            <Link href="/jobs" className="text-[#C2185B] font-bold text-sm hover:underline cursor-pointer">See all jobs</Link>
+            <Link href="/jobs" className="px-6 py-2 rounded-full bg-pink-50 text-[#C2185B] font-bold text-sm hover:bg-pink-100 transition-colors cursor-pointer">See all jobs</Link>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {roles.map((role) => (
-              <div key={role.title} className="bg-zinc-50 dark:bg-zinc-900 p-8 rounded-[2.5rem] shadow-sm border border-zinc-100 dark:border-zinc-800 hover:shadow-md transition-shadow group cursor-pointer">
-                <div className="flex justify-between items-start mb-6">
-                  <div className="w-12 h-12 bg-pink-50 dark:bg-zinc-800 rounded-xl flex items-center justify-center">
-                    <role.icon className="w-6 h-6 text-[#C2185B]" />
+            {loading ? (
+              // Loading skeletons
+              Array.from({ length: 3 }).map((_, index) => (
+                <div key={index} className="bg-zinc-50 dark:bg-zinc-900 p-8 rounded-[2.5rem] shadow-sm border border-zinc-100 dark:border-zinc-800 animate-pulse">
+                  <div className="flex justify-between items-start mb-6">
+                    <div className="w-12 h-12 bg-zinc-200 dark:bg-zinc-700 rounded-xl"></div>
+                  </div>
+                  <div className="h-6 bg-zinc-200 dark:bg-zinc-700 rounded mb-4"></div>
+                  <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded mb-6"></div>
+                  <div className="flex justify-between items-center mt-auto">
+                    <div className="h-4 bg-zinc-200 dark:bg-zinc-700 rounded w-20"></div>
+                    <div className="h-8 bg-zinc-200 dark:bg-zinc-700 rounded w-20"></div>
                   </div>
                 </div>
-                <h3 className="text-xl font-bold mb-1 dark:text-white">{role.title}</h3>
-                <p className="text-sm text-zinc-500 mb-6">{role.company} • {role.location}</p>
-                <div className="flex justify-between items-center mt-auto">
-                  <span className="font-bold text-sm dark:text-white">{role.pay}</span>
-                  <button className="bg-[#C2185B] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all hover:bg-[#A3154D] cursor-pointer">
-                    Apply now
-                  </button>
-                </div>
+              ))
+            ) : publicJobs.length > 0 ? (
+              publicJobs.map((job) => {
+                const JobIcon = getJobIcon(job.type);
+                return (
+                  <div key={job.id} className="bg-zinc-50 dark:bg-zinc-900 p-8 rounded-[2.5rem] shadow-sm border border-zinc-100 dark:border-zinc-800 hover:shadow-md transition-shadow group cursor-pointer">
+                    <div className="flex justify-between items-start mb-6">
+                      <div className="w-12 h-12 bg-pink-50 dark:bg-zinc-800 rounded-xl flex items-center justify-center">
+                        <JobIcon className="w-6 h-6 text-[#C2185B]" />
+                      </div>
+                    </div>
+                    <h3 className="text-xl font-bold mb-1 dark:text-white">{job.title}</h3>
+                    <p className="text-sm text-zinc-500 mb-6">{job.companyName} • {job.locationType}</p>
+                    <div className="flex justify-between items-center mt-auto">
+                      <span className="font-bold text-sm dark:text-white">{job.compensation || 'Competitive pay'}</span>
+                      <button className="bg-[#C2185B] text-white px-5 py-2.5 rounded-xl text-xs font-bold transition-all hover:bg-[#A3154D] cursor-pointer">
+                        Apply now
+                      </button>
+                    </div>
+                  </div>
+                );
+              })
+            ) : (
+              <div className="col-span-3 text-center py-12 text-zinc-500">
+                No jobs available at the moment. Check back later!
               </div>
-            ))}
+            )}
           </div>
         </div>
       </section>
@@ -198,48 +254,48 @@ export function JobLanding() {
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="bg-[#18141C] rounded-[3rem] overflow-hidden flex flex-col lg:flex-row shadow-2xl">
             {/* Left Column: For job seekers */}
-            <div className="flex-1 p-12 lg:p-20 bg-[#FFF5F8] dark:bg-pink-950/10">
-              <div className="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl mb-8 flex items-center justify-center shadow-sm">
+            <div className="flex-1 p-8 lg:p-12 bg-[#FFF5F8] dark:bg-pink-950/10">
+              <div className="w-12 h-12 bg-white dark:bg-zinc-800 rounded-2xl mb-6 flex items-center justify-center shadow-sm">
                 <Search className="w-6 h-6 text-[#C2185B]" />
               </div>
-              <h2 className="text-4xl font-bold mb-6 dark:text-white text-zinc-900">For job seekers</h2>
-              <p className="text-zinc-600 dark:text-zinc-400 mb-12 leading-relaxed">
+              <h2 className="text-3xl font-bold mb-4 dark:text-white text-zinc-900">For job seekers</h2>
+              <p className="text-zinc-600 dark:text-zinc-400 mb-8 leading-relaxed max-w-md">
                 Everything on the landing page now supports one goal: helping talent discover better-fit opportunities and move from discovery to application with confidence.
               </p>
-              <ul className="space-y-6">
+              <ul className="space-y-3 mb-8">
                 {[
                   "Search roles by skills, seniority, and availability",
                   "See compensation and company context upfront no hidden expectations",
                   "Complete a short case study to showcase your real skills (not just a resume)",
                   "Get matched with serious clients ready to hire"
                 ].map((item) => (
-                  <li key={item} className="flex items-center gap-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-                    <div className="w-6 h-6 rounded-full bg-pink-200 dark:bg-pink-900/40 flex-shrink-0 flex items-center justify-center">
-                      <CheckCircle2 className="w-4 h-4 text-[#C2185B]" />
+                  <li key={item} className="flex items-center gap-3 text-sm font-semibold text-zinc-800 dark:text-zinc-200">
+                    <div className="w-5 h-5 rounded-full bg-pink-200 dark:bg-pink-900/40 flex-shrink-0 flex items-center justify-center">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-[#C2185B]" />
                     </div>
                     {item}
                   </li>
                 ))}
               </ul>
-              <Link href="/signup" className="mt-12 w-full bg-[#C2185B] text-white py-5 rounded-2xl font-bold text-lg hover:bg-[#A3154D] transition-all cursor-pointer shadow-lg shadow-pink-500/20">
+              <Link href="/signup" className="inline-block bg-[#C2185B] text-white px-8 py-3 rounded-xl font-bold text-base hover:bg-[#A3154D] transition-all cursor-pointer shadow-lg shadow-pink-500/20">
                 Find jobs
               </Link>
             </div>
 
             {/* Right Column: How it Works Steps */}
-            <div className="flex-1 p-12 lg:p-20 flex flex-col justify-center">
+            <div className="flex-1 p-8 lg:p-12 flex flex-col justify-center">
               <span className="text-zinc-500 font-bold text-xs uppercase tracking-widest mb-4 block">How It Works</span>
-              <h3 className="text-3xl lg:text-4xl font-bold text-white mb-12 leading-tight">From discovery to matching, simplified</h3>
-              <div className="space-y-6">
+              <h3 className="text-2xl lg:text-3xl font-bold text-white mb-8 leading-tight">From discovery to matching, simplified</h3>
+              <div className="space-y-4">
                 {[
                   { step: "1", title: "Discover curated opportunities", desc: "Browse high-quality roles from U.S. businesses looking for global expertise." },
                   { step: "2", title: "Review role expectations", desc: "See clear requirements, compensation, and team context before you commit." },
                   { step: "3", title: "Complete a short case study", desc: "Showcase your skills through real work samples. We value capability over just resumes." },
                   { step: "4", title: "Get matched with serious clients", desc: "Fast-track your way to interviews with clients who are ready to hire." }
                 ].map((item) => (
-                  <div key={item.step} className="bg-[#252029] p-8 rounded-[2rem] border border-white/5 transition-transform hover:scale-[1.02] cursor-pointer group">
-                    <div className="text-zinc-500 font-bold text-xs mb-3">Step {item.step}</div>
-                    <h4 className="font-bold text-xl text-white mb-2 group-hover:text-[#C2185B] transition-colors">{item.title}</h4>
+                  <div key={item.step} className="bg-[#252029] p-6 rounded-[2rem] border border-white/5 transition-transform hover:scale-[1.02] cursor-pointer group">
+                    <div className="text-zinc-500 font-bold text-xs mb-2">Step {item.step}</div>
+                    <h4 className="font-bold text-lg text-white mb-1 group-hover:text-[#C2185B] transition-colors">{item.title}</h4>
                     <p className="text-zinc-400 text-sm leading-relaxed">{item.desc}</p>
                   </div>
                 ))}

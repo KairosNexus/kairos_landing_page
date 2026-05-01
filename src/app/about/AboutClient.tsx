@@ -83,7 +83,7 @@ export function AboutClient() {
               About Kairos
             </h1>
             <p className="text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto text-lg">
-              Built on trust. Governed by principle. We're reimagining how global talent connects with serious opportunity.
+              Built on trust. Governed by principle. We&apos;re reimagining how global talent connects with serious opportunity.
             </p>
           </div>
         </div>
@@ -106,7 +106,7 @@ export function AboutClient() {
           <div className="text-center mb-12">
             <h2 className="text-3xl lg:text-4xl font-bold dark:text-white mb-4">What Makes Us Different</h2>
             <p className="text-zinc-500 dark:text-zinc-400 max-w-2xl mx-auto">
-              We're not another freelance marketplace. Every part of Kairos is designed to reduce risk and increase quality for both sides.
+              We&apos;re not another freelance marketplace. Every part of Kairos is designed to reduce risk and increase quality for both sides.
             </p>
           </div>
 

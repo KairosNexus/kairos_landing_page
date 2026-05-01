@@ -42,6 +42,8 @@ export function Header({ intent, setIntent }: HeaderProps) {
       href: "#",
       onClick: handleIntentSwitch
     },
+    // { name: "Sign In", href: "/login" },
+
     { name: "Security", href: "/security" },
   ];
 
@@ -87,7 +89,7 @@ export function Header({ intent, setIntent }: HeaderProps) {
           <div className="hidden md:flex items-center gap-4">
             <ThemeToggle />
             <Link 
-              href="#" 
+              href="/login" 
               className="text-sm font-medium text-gray-600 hover:text-black dark:text-gray-400 dark:hover:text-white transition-colors cursor-pointer"
             >
               Sign In

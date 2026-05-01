@@ -9,7 +9,7 @@ const apiClient: AxiosInstance = axios.create({
     "Content-Type": "application/json",
   },
 });
-
+console.log({API_BASE_URL})
 apiClient.interceptors.request.use(
   (config: InternalAxiosRequestConfig) => {
     if (typeof window !== "undefined") {
@@ -220,5 +220,77 @@ export async function registerUser(data: RegisterRequest): Promise<ApiResponse<A
 
 export async function loginUser(data: LoginRequest): Promise<ApiResponse<string>> {
   const response = await apiClient.post(`/auth/login`, data);
+  return response.data;
+}
+
+export interface PublicJob {
+  id: string;
+  title: string;
+  companyName: string;
+  companyLogo?: string;
+  locationType: string;
+  type: string;
+  experienceLevel: string;
+  compensation?: string;
+  skills: string[];
+  createdAt: string;
+  applicationCloseDate?: string;
+}
+
+export interface PublicTalent {
+  id: string;
+  firstName: string;
+  lastName: string;
+  bio?: string;
+  skills: string[];
+  jobTitles: string[];
+  experienceLevel: string;
+  employmentType: string;
+  jobRole: string;
+  location?: string;
+  profilePicture?: string;
+}
+
+export interface PaginatedResponse<T> {
+  message: string;
+  data: T[];
+  pagination: {
+    total: number;
+    page: number;
+    limit: number;
+    totalPages: number;
+    hasNext: boolean;
+    hasPrevious: boolean;
+  };
+}
+
+export interface GetPublicJobsParams {
+  search?: string;
+  locationType?: string;
+  jobType?: string;
+  experienceLevel?: string;
+  skills?: string;
+  page?: number;
+  limit?: number;
+}
+
+export interface GetPublicTalentsParams {
+  search?: string;
+  skills?: string;
+  jobTitles?: string;
+  experienceLevel?: string;
+  locationPreference?: string;
+  jobTypePreference?: string;
+  page?: number;
+  limit?: number;
+}
+
+export async function getPublicJobs(params?: GetPublicJobsParams): Promise<PaginatedResponse<PublicJob>> {
+  const response = await apiClient.get(`/default/public-jobs`, { params });
+  return response.data;
+}
+
+export async function getPublicTalents(params?: GetPublicTalentsParams): Promise<PaginatedResponse<PublicTalent>> {
+  const response = await apiClient.get(`/default/public-talents`, { params });
   return response.data;
 }
