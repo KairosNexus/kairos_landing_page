@@ -1,3 +1,5 @@
+"use client";
+
 import Link from "next/link";
 import { Home, ArrowRight, Search, Clock, MapPin, Sparkles, Compass } from "lucide-react";
 import { motion, Easing } from "framer-motion";
