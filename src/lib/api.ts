@@ -1,4 +1,44 @@
+import axios, { AxiosInstance, InternalAxiosRequestConfig, AxiosResponse, AxiosError } from "axios";
 import { Code, Palette, Headset, Brain, FileText, Users, Briefcase, Database, Layout, BarChart, Settings, Search, Megaphone, Video, UserCheck } from "lucide-react";
+
+const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+
+const apiClient: AxiosInstance = axios.create({
+  baseURL: API_BASE_URL,
+  headers: {
+    "Content-Type": "application/json",
+  },
+});
+
+apiClient.interceptors.request.use(
+  (config: InternalAxiosRequestConfig) => {
+    if (typeof window !== "undefined") {
+      const token = localStorage.getItem("authToken");
+      if (token && config.headers) {
+        config.headers.Authorization = `Bearer ${token}`;
+      }
+    }
+    return config;
+  },
+  (error: AxiosError) => {
+    return Promise.reject(error);
+  }
+);
+
+apiClient.interceptors.response.use(
+  (response: AxiosResponse) => {
+    return response;
+  },
+  (error: AxiosError) => {
+    if (error.response?.status === 401) {
+      if (typeof window !== "undefined") {
+        localStorage.removeItem("authToken");
+        window.location.href = "/login";
+      }
+    }
+    return Promise.reject(error);
+  }
+);
 
 export interface Job {
   id: string;
@@ -11,7 +51,7 @@ export interface Job {
   verified?: boolean;
   icon: React.ComponentType<{ className?: string }>;
   category: string;
-  type: string; // Full-time, Contract, etc.
+  type: string;
   postedAt: string;
   description: string;
 }
@@ -23,7 +63,6 @@ export interface Category {
   tag: string;
   count: string;
   icon: React.ComponentType<{ className?: string }>;
-
 }
 
 export const categories: Category[] = [
@@ -120,13 +159,66 @@ export const jobs: Job[] = [
 ];
 
 export async function getCategories() {
-  // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
   return categories;
 }
 
 export async function getJobs() {
-  // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 500));
   return jobs;
+}
+
+export interface ApiResponse<T> {
+  message: string;
+  data?: T;
+}
+
+export type UserRole = "STUDENT" | "COMPANY" | "ADMIN" | "SUPERADMIN";
+
+export interface RegisterRequest {
+  email: string;
+  firstName: string;
+  lastName: string;
+  password: string;
+  role: UserRole;
+  otp: string;
+  companyName?: string;
+}
+
+export interface LoginRequest {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  token: string;
+  reference?: string;
+}
+
+export async function generateOTP(email: string): Promise<ApiResponse<void>> {
+  const response = await apiClient.get(`/default/generate-otp`, {
+    params: {
+      destination: "EMAIL",
+      identity: email,
+      len: 6,
+    },
+  });
+  return response.data;
+}
+
+export async function checkEmailExists(email: string): Promise<{ exists: boolean }> {
+  const response = await apiClient.get(`/auth/check-email-exist`, {
+    params: { email },
+  });
+  return response.data;
+}
+
+export async function registerUser(data: RegisterRequest): Promise<ApiResponse<AuthResponse>> {
+  const response = await apiClient.post(`/auth/register`, data);
+  return response.data;
+}
+
+export async function loginUser(data: LoginRequest): Promise<ApiResponse<string>> {
+  const response = await apiClient.post(`/auth/login`, data);
+  return response.data;
 }

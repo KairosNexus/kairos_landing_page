@@ -3,7 +3,7 @@
 import { X, Briefcase, Users, CheckCircle2 } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
-interface IntentModalProps {
+export interface IntentModalProps {
   isOpen: boolean;
   onClose: () => void;
   onSelect: (intent: "talent" | "company") => void;

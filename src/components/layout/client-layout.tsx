@@ -3,7 +3,7 @@
 import { Header } from "@/components/layout/header";
 import { Footer } from "@/components/layout/footer";
 import { IntentProvider, useIntent } from "@/components/providers/intent-provider";
-import { IntentModal } from "@/components/ui/intent-modal";
+import { ClientIntentModal } from "@/components/ui/client-intent-modal";
 import { ScrollToTop } from "@/components/ui/scroll-to-top";
 
 function LayoutContent({ children }: { children: React.ReactNode }) {
@@ -21,7 +21,7 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
 
       <ScrollToTop />
 
-      <IntentModal 
+      <ClientIntentModal 
         isOpen={showModal} 
         onClose={() => setShowModal(false)} 
         onSelect={setIntent} 

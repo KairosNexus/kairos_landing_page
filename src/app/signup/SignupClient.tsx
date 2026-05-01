@@ -2,31 +2,77 @@
 
 import { useState } from "react";
 import Link from "next/link";
-import { Eye, EyeOff, ArrowRight, Mail, Lock, User, CheckCircle2 } from "lucide-react";
+import { Eye, EyeOff, ArrowRight, Mail, Lock, User, CheckCircle2, Send, ShieldCheck } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { generateOTP, registerUser, UserRole } from "@/lib/api";
 
 type Intent = "talent" | "company";
 
 export function SignupClient() {
   const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
   const [intent, setIntent] = useState<Intent>("talent");
   const [formData, setFormData] = useState({
-    name: "",
+    firstName: "",
+    lastName: "",
+    companyName: "",
     email: "",
     password: "",
+    otp: "",
   });
   const [termsAccepted, setTermsAccepted] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  const handleSendOtp = async () => {
+    if (!formData.email) {
+      setError("Please enter your email first");
+      return;
+    }
+    setSendingOtp(true);
+    setError(null);
+    try {
+      const result = await generateOTP(formData.email);
+      if (result.message) {
+        setOtpSent(true);
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || "Failed to send OTP. Please try again.");
+    } finally {
+      setSendingOtp(false);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1500));
-    
-    setIsLoading(false);
-    console.log("Signup submitted:", { ...formData, intent, termsAccepted });
+    setError(null);
+
+    try {
+      const role: UserRole = intent === "company" ? "COMPANY" : "STUDENT";
+      
+      const result = await registerUser({
+        email: formData.email,
+        firstName: formData.firstName,
+        lastName: formData.lastName,
+        password: formData.password,
+        role,
+        otp: formData.otp,
+        companyName: intent === "company" ? formData.companyName : undefined,
+      });
+
+      if (result.data?.token) {
+        localStorage.setItem("authToken", result.data.token);
+        window.location.href = "/";
+      } else {
+        setError(result.message || "Signup failed");
+      }
+    } catch (err: any) {
+      setError(err.response?.data?.message || "An error occurred during signup. Please try again.");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
@@ -79,29 +125,79 @@ export function SignupClient() {
 
         {/* Signup Form */}
         <div className="bg-white dark:bg-zinc-900 rounded-[2.5rem] p-8 shadow-sm border border-zinc-100 dark:border-zinc-800">
+          {error && (
+            <div className="mb-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl text-red-700 dark:text-red-300 text-sm">
+              {error}
+            </div>
+          )}
+
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Name Field */}
-            <div className="space-y-2">
-              <label htmlFor="name" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
-                Full name
-              </label>
-              <div className="relative">
-                <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
-                  <User className="w-5 h-5 text-zinc-400" />
+            {/* Name Fields */}
+            <div className="grid grid-cols-2 gap-4">
+              <div className="space-y-2">
+                <label htmlFor="firstName" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  First name
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className="w-5 h-5 text-zinc-400" />
+                  </div>
+                  <input
+                    id="firstName"
+                    type="text"
+                    required
+                    value={formData.firstName}
+                    onChange={(e) => setFormData({ ...formData, firstName: e.target.value })}
+                    className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C2185B]/20 focus:border-[#C2185B] transition-all"
+                    placeholder="John"
+                  />
                 </div>
-                <input
-                  id="name"
-                  type="text"
-                  required
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C2185B]/20 focus:border-[#C2185B] transition-all"
-                  placeholder={intent === "talent" ? "John Doe" : "Company Name"}
-                />
+              </div>
+              <div className="space-y-2">
+                <label htmlFor="lastName" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Last name
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <User className="w-5 h-5 text-zinc-400" />
+                  </div>
+                  <input
+                    id="lastName"
+                    type="text"
+                    required
+                    value={formData.lastName}
+                    onChange={(e) => setFormData({ ...formData, lastName: e.target.value })}
+                    className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C2185B]/20 focus:border-[#C2185B] transition-all"
+                    placeholder="Doe"
+                  />
+                </div>
               </div>
             </div>
 
-            {/* Email Field */}
+            {/* Company Name (only for company) */}
+            {intent === "company" && (
+              <div className="space-y-2">
+                <label htmlFor="companyName" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Company name
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <ShieldCheck className="w-5 h-5 text-zinc-400" />
+                  </div>
+                  <input
+                    id="companyName"
+                    type="text"
+                    required
+                    value={formData.companyName}
+                    onChange={(e) => setFormData({ ...formData, companyName: e.target.value })}
+                    className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C2185B]/20 focus:border-[#C2185B] transition-all"
+                    placeholder="Your Company Inc."
+                  />
+                </div>
+              </div>
+            )}
+
+            {/* Email Field with Send OTP */}
             <div className="space-y-2">
               <label htmlFor="email" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
                 Email address
@@ -116,11 +212,52 @@ export function SignupClient() {
                   required
                   value={formData.email}
                   onChange={(e) => setFormData({ ...formData, email: e.target.value })}
-                  className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C2185B]/20 focus:border-[#C2185B] transition-all"
+                  className="w-full pl-12 pr-28 py-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C2185B]/20 focus:border-[#C2185B] transition-all"
                   placeholder="you@example.com"
                 />
+                <button
+                  type="button"
+                  onClick={handleSendOtp}
+                  disabled={sendingOtp || !formData.email}
+                  className="absolute inset-y-0 right-2 my-2 px-4 bg-[#C2185B] text-white rounded-xl text-sm font-semibold hover:bg-[#A3154D] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2"
+                >
+                  {sendingOtp ? (
+                    <span className="animate-pulse">Sending...</span>
+                  ) : otpSent ? (
+                    "Resend OTP"
+                  ) : (
+                    <>
+                      <Send className="w-4 h-4" />
+                      Send OTP
+                    </>
+                  )}
+                </button>
               </div>
             </div>
+
+            {/* OTP Field (only show after OTP is sent) */}
+            {otpSent && (
+              <div className="space-y-2">
+                <label htmlFor="otp" className="text-sm font-medium text-zinc-700 dark:text-zinc-300">
+                  Verification code
+                </label>
+                <div className="relative">
+                  <div className="absolute inset-y-0 left-0 pl-4 flex items-center pointer-events-none">
+                    <CheckCircle2 className="w-5 h-5 text-zinc-400" />
+                  </div>
+                  <input
+                    id="otp"
+                    type="text"
+                    required
+                    maxLength={6}
+                    value={formData.otp}
+                    onChange={(e) => setFormData({ ...formData, otp: e.target.value.replace(/[^0-9]/g, "") })}
+                    className="w-full pl-12 pr-4 py-4 bg-zinc-50 dark:bg-zinc-800 border border-zinc-200 dark:border-zinc-700 rounded-2xl text-zinc-900 dark:text-white placeholder:text-zinc-400 focus:outline-none focus:ring-2 focus:ring-[#C2185B]/20 focus:border-[#C2185B] transition-all text-center tracking-widest text-xl"
+                    placeholder="123456"
+                  />
+                </div>
+              </div>
+            )}
 
             {/* Password Field */}
             <div className="space-y-2">
@@ -202,7 +339,7 @@ export function SignupClient() {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={isLoading || !termsAccepted}
+              disabled={isLoading || !termsAccepted || !otpSent}
               className="w-full bg-[#C2185B] text-white py-4 rounded-2xl font-bold text-lg hover:bg-[#A3154D] transition-all shadow-lg shadow-pink-500/20 disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {isLoading ? (
