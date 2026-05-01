@@ -35,15 +35,14 @@ export function Header({ intent, setIntent }: HeaderProps) {
   };
 
   const navLinks = [
-    { name: "About", href: "/#" },
-    { name: "How It Works", href: "/#how-it-works" },
+    { name: "About", href: "/about" },
+    { name: "How It Works", href: "/how-it-works" },
     { 
       name: intent === "talent" ? "For Companies" : "For Talent", 
       href: "#",
       onClick: handleIntentSwitch
     },
-    { name: "Security", href: "/#security" },
-    { name: "Pricing", href: "/#pricing" },
+    { name: "Security", href: "/security" },
   ];
 
   return (
@@ -141,12 +140,12 @@ export function Header({ intent, setIntent }: HeaderProps) {
             )
           ))}
           <div className="flex flex-col gap-4 pt-4">
-            <Link href="#" className="text-sm font-medium text-gray-600 dark:text-gray-400">
+            <Link href="/login" className="text-sm font-medium text-gray-600 dark:text-gray-400">
               Sign In
             </Link>
-            <button className="bg-[#C2185B] text-white px-5 py-3 rounded-full text-sm font-medium text-center">
+            <Link href="/signup" className="bg-[#C2185B] text-white px-5 py-3 rounded-full text-sm font-medium text-center">
               {intent === "talent" ? "Join as Talent" : "Start Hiring"}
-            </button>
+            </Link>
           </div>
         </nav>
       </div>

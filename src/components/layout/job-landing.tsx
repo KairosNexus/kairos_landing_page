@@ -1,6 +1,7 @@
-import { Search, ArrowRight, Star, Clock, MapPin, CheckCircle2, ShieldCheck, Filter, Target, Globe, Palette, Headset, Code, Brain, FileText, Users, ExternalLink } from "lucide-react";
+import { Search, ArrowRight, Star, Clock, MapPin, CheckCircle2, ShieldCheck, Filter, Target, Globe, Palette, Headset, Code, Brain, FileText, Users, ExternalLink, Award, Building } from "lucide-react";
 import Link from "next/link";
 import { TrustSection } from "./trust-section";
+import { Cofounders } from "./cofounders";
 
 // Custom LinkedIn Icon since it might be missing in this version of lucide-react
 const LinkedinIcon = ({ className }: { className?: string }) => (
@@ -27,6 +28,12 @@ export function JobLanding() {
     { title: "Product Designer", company: "SaaS Growth Co.", location: "Remote", pay: "$2.8k-$4.1k/month", featured: true, icon: Palette },
     { title: "Customer Success Lead", company: "Northstar AI", location: "U.S. Hours", pay: "$1.8k-$3.2k/month", urgent: true, icon: Headset },
     { title: "Frontend Engineer", company: "Kairos Partner Role", location: "Remote", pay: "$3.5k-$5.0k/month", verified: true, icon: Code },
+  ];
+
+  const highlightCategories = [
+    { title: "Product Design", desc: "UI/UX designers who ship real products", count: "390+ Experts" },
+    { title: "Frontend Engineering", desc: "React, Vue, and modern web developers", count: "420+ Experts" },
+    { title: "Customer Success", desc: "Support and client success professionals", count: "215+ Experts" },
   ];
 
   return (
@@ -88,8 +95,10 @@ export function JobLanding() {
 
       <TrustSection />
 
+    
+
       {/* Roles Section */}
-      <section className="py-20 bg-zinc-50 dark:bg-zinc-900/50">
+      <section className="py-20 bg-white dark:bg-zinc-950">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-end mb-12">
             <div>
@@ -101,7 +110,7 @@ export function JobLanding() {
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {roles.map((role) => (
-              <div key={role.title} className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] shadow-sm border border-zinc-100 dark:border-zinc-800 hover:shadow-md transition-shadow group cursor-pointer">
+              <div key={role.title} className="bg-zinc-50 dark:bg-zinc-900 p-8 rounded-[2.5rem] shadow-sm border border-zinc-100 dark:border-zinc-800 hover:shadow-md transition-shadow group cursor-pointer">
                 <div className="flex justify-between items-start mb-6">
                   <div className="w-12 h-12 bg-pink-50 dark:bg-zinc-800 rounded-xl flex items-center justify-center">
                     <role.icon className="w-6 h-6 text-[#C2185B]" />
@@ -121,7 +130,43 @@ export function JobLanding() {
         </div>
       </section>
 
-      {/* Why Section */}
+      {/* High-Demand Categories Section */}
+      <section className="py-20 bg-zinc-50 dark:bg-zinc-900/50">
+        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+          <div className="max-w-3xl mb-12">
+            <span className="text-[#C2185B] font-bold text-xs uppercase tracking-widest mb-2 block">High-Demand Expertise</span>
+            <h2 className="text-3xl lg:text-4xl font-bold dark:text-white leading-tight">
+              Skill sets companies are actively hiring for
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+            {highlightCategories.map((cat, idx) => (
+              <div
+                key={idx}
+                className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] shadow-sm border border-zinc-100 dark:border-zinc-800 hover:shadow-md transition-shadow group cursor-pointer"
+              >
+                <div className="flex justify-between items-start mb-4">
+                  <span className="px-3 py-1 bg-pink-50 dark:bg-pink-900/20 text-[#C2185B] text-[10px] font-bold rounded-md uppercase tracking-wider">
+                    In Demand
+                  </span>
+                  <span className="text-xs font-bold text-zinc-400">{cat.count}</span>
+                </div>
+                <h3 className="text-xl font-bold mb-3 dark:text-white">{cat.title}</h3>
+                <p className="text-sm text-zinc-600 dark:text-zinc-400 leading-relaxed">{cat.desc}</p>
+                <button className="mt-6 text-[#C2185B] font-bold text-sm hover:underline">
+                  View roles →
+                </button>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* Cofounders Section */}
+      <Cofounders />
+
+      {/* CTA Section */}
       <section className="py-24">
         <div className="container mx-auto px-4 sm:px-6 lg:px-8">
           <div className="max-w-3xl mb-16">
@@ -164,18 +209,21 @@ export function JobLanding() {
               <ul className="space-y-6">
                 {[
                   "Search roles by skills, seniority, and availability",
-                  "See compensation and company context upfront",
-                  "Apply faster to roles aligned with your profile"
+                  "See compensation and company context upfront no hidden expectations",
+                  "Complete a short case study to showcase your real skills (not just a resume)",
+                  "Get matched with serious clients ready to hire"
                 ].map((item) => (
                   <li key={item} className="flex items-center gap-4 text-sm font-semibold text-zinc-800 dark:text-zinc-200">
-                    <div className="w-6 h-6 rounded-full bg-pink-200 dark:bg-pink-900/40 flex-shrink-0" />
+                    <div className="w-6 h-6 rounded-full bg-pink-200 dark:bg-pink-900/40 flex-shrink-0 flex items-center justify-center">
+                      <CheckCircle2 className="w-4 h-4 text-[#C2185B]" />
+                    </div>
                     {item}
                   </li>
                 ))}
               </ul>
-              <button className="mt-12 w-full bg-[#C2185B] text-white py-5 rounded-2xl font-bold text-lg hover:bg-[#A3154D] transition-all cursor-pointer shadow-lg shadow-pink-500/20">
+              <Link href="/signup" className="mt-12 w-full bg-[#C2185B] text-white py-5 rounded-2xl font-bold text-lg hover:bg-[#A3154D] transition-all cursor-pointer shadow-lg shadow-pink-500/20">
                 Find jobs
-              </button>
+              </Link>
             </div>
 
             {/* Right Column: How it Works Steps */}
@@ -201,59 +249,8 @@ export function JobLanding() {
         </div>
       </section>
 
-      {/* Built on Trust Section */}
-      <section className="py-24">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="max-w-3xl mb-16">
-            <span className="text-[#C2185B] font-bold text-xs uppercase tracking-widest mb-2 block">Built on Trust</span>
-            <h2 className="text-4xl lg:text-5xl font-bold dark:text-white leading-tight mb-6">Built by people who understand trust</h2>
-            <p className="text-lg text-zinc-500 dark:text-zinc-400">
-              The platform is designed to make global job discovery feel more trusted, direct, and useful for talent.
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {[
-              { 
-                name: "Jubelo Oyeniran", 
-                role: "Co-Founder", 
-                bio: "Focused on building a trusted path between ambitious talent and serious global opportunities.",
-                image: "/Jubelo.jpeg",
-                linkedin: "https://www.linkedin.com/in/jubelooyeniran/"
-              },
-              { 
-                name: "Ayorinde Alase", 
-                role: "Co-Founder", 
-                bio: "Bringing product and intelligent matching thinking to help talent find higher-quality roles faster.",
-                image: "/Ayorinde.jfif",
-                linkedin: "https://www.linkedin.com/in/ayorinde-alase/",
-                website: "https://www.theayoalase.com/"
-              }
-            ].map((founder) => (
-              <div key={founder.name} className="bg-white dark:bg-zinc-900 p-8 rounded-[2.5rem] border border-zinc-100 dark:border-zinc-800 shadow-sm flex flex-col sm:flex-row items-center sm:items-start gap-8">
-                <div className="w-24 h-24 sm:w-28 sm:h-28 rounded-2xl flex-shrink-0 overflow-hidden border-2 border-pink-100 dark:border-pink-900/30">
-                  <img src={founder.image} alt={founder.name} className="w-full h-full object-cover" />
-                </div>
-                <div className="flex-1 text-center sm:text-left">
-                  <h3 className="text-2xl font-bold dark:text-white mb-1">{founder.name}</h3>
-                  <p className="text-[#C2185B] font-bold text-xs uppercase tracking-widest mb-4">{founder.role}</p>
-                  <p className="text-zinc-500 dark:text-zinc-400 leading-relaxed mb-6">{founder.bio}</p>
-                  <div className="flex items-center justify-center sm:justify-start gap-4">
-                    <a href={founder.linkedin} target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-50 dark:bg-zinc-800 rounded-lg text-zinc-400 hover:text-[#0077B5] dark:hover:text-[#0077B5] transition-colors cursor-pointer">
-                      <LinkedinIcon className="w-5 h-5" />
-                    </a>
-                    {founder.website && (
-                      <a href={founder.website} target="_blank" rel="noopener noreferrer" className="p-2 bg-zinc-50 dark:bg-zinc-800 rounded-lg text-zinc-400 hover:text-[#C2185B] dark:hover:text-[#C2185B] transition-colors cursor-pointer">
-                        <Globe className="w-5 h-5" />
-                      </a>
-                    )}
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
+      {/* Cofounders Section */}
+      <Cofounders />
 
       {/* Safety and Clarity Section */}
       <section className="py-24">
@@ -292,9 +289,9 @@ export function JobLanding() {
               A cleaner route from role discovery to application, designed for talent looking for better-fit remote jobs.
             </p>
           </div>
-          <button className="relative z-10 bg-[#C2185B] text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-[#A3154D] transition-all shadow-xl shadow-pink-500/20 cursor-pointer">
+          <Link href="/signup" className="relative z-10 bg-[#C2185B] text-white px-10 py-5 rounded-2xl font-bold text-lg hover:bg-[#A3154D] transition-all shadow-xl shadow-pink-500/20 cursor-pointer">
             Access platform
-          </button>
+          </Link>
           {/* Subtle background decoration */}
           <div className="absolute top-0 right-0 w-96 h-96 bg-[#C2185B] opacity-10 blur-[100px] -mr-48 -mt-48" />
         </div>

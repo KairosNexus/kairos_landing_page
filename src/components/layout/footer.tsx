@@ -5,28 +5,27 @@ export function Footer() {
     {
       title: "PLATFORM",
       links: [
-        { name: "For Businesses", href: "#" },
-        { name: "Pricing", href: "#" },
-        { name: "How It Works", href: "#" },
-        { name: "Hire Talent", href: "#" },
+        { name: "For Businesses", href: "/for-business" },
+        { name: "How It Works", href: "/how-it-works" },
+        { name: "Hire Talent", href: "/hire-talent" },
       ],
     },
     {
       title: "COMPANY",
       links: [
-        { name: "About Us", href: "#" },
-        { name: "Security", href: "#" },
-        { name: "Case Studies", href: "#" },
-        { name: "Contact", href: "#" },
+        { name: "About Us", href: "/about" },
+        { name: "Case Studies", href: "/case-studies" },
+        { name: "Security", href: "/security" },
+        { name: "Contact", href: "/contact" },
       ],
     },
     {
       title: "LEGAL",
       links: [
-        { name: "Privacy Policy", href: "#" },
-        { name: "Terms of Service", href: "#" },
-        { name: "Data Governance", href: "#" },
-        { name: "Cookie Policy", href: "#" },
+        { name: "Privacy Policy", href: "/privacy-policy" },
+        { name: "Terms of Service", href: "/terms-of-service" },
+        { name: "Data Governance", href: "/privacy-policy#section-9" },
+        { name: "Cookie Policy", href: "/privacy-policy#section-13" },
       ],
     },
   ];
